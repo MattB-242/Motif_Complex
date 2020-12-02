@@ -84,10 +84,10 @@ class crystal_2d:
     '---------------------------------------------------------------------------'
     def expand(self, e, s=1):
 
-        'Generate a list of reduced translation vectors in 2d'
+        'Generate a list of reduced translation indices in 2d starting at layer s and ending at layer e'
         translist = ti_list(2,e,s)
 
-        'Add translated motif points'
+        'Calculate lattice translate vectors from indices and add new points to crystal'
         for i in self.vertices:
             for j in translist:
                 j_vect = [sum(z) for z in zip([(j[0]*i) for i in self.lattice[0]], [j[1]*i for i in self.lattice[1]])]
