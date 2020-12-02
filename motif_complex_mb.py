@@ -84,11 +84,14 @@ class crystal_2d:
     '---------------------------------------------------------------------------'
     def expand(self, e, s=1):
 
+        'Generate a list of reduced translation vectors in 2d'
         translist = ti_list(2,e,s)
 
+        'Add translated motif points'
         for i in self.vertices:
             for j in translist:
-                move_point = [sum(x) for x in zip(self.motif[i][0], j)]
+                j_vect = [sum(z) for z in zip([(j[0]*i) for i in self.lattice[0]], [j[1]*i for i in self.lattice[1]])]
+                move_point = [sum(x) for x in zip(self.motif[i][0], j_vect)]
                 self.motif[i].append(move_point)
 
 
@@ -107,9 +110,9 @@ class crystal_2d:
 
         vertrans = []
 
+        'Expand graph in layers up to the layer beyond the target distance'
         i = 1
         while maxdist(self.getpoints()) < s:
-            'Expand graph in layers up to the layer beyond the target distance'
             vertrans.extend(self.expand(i, i-1))
             i+=1
 
@@ -132,18 +135,12 @@ class crystal_2d:
                     d = np.linalg.norm(np.array(k) - np.array(mot_point))
                     'Add vertex and edge data if distance less than threshold'
                     if d != 0 and d < s:
+                        'Avoid duplicate reverse translatons'
                         if vertrans[p] not in vert_list[j]:
                             vert_list[j].append(vertrans[p])
-                        'Check if '
+                        'Avoid duplication of (i,j) and (j,i) edges (again, from reverse translations)'
                         if (i,j) in edge_list.keys():
                             edge_list[(i,j)].append([vertrans[p],d])
 
 
         return [vert_list, edge_list]
-
-
-onepoint = crystal_2d([[0,1], [1,0]], {1:[[0.4,0.2]]})
-twopoint = crystal_2d([[0,1], [1,0]], {1:[[0.4,0.2]], 2:[[0.8,0.9]]})
-
-testgraph = twopoint.motif_graph_2d(1)
-print(testgraph)
