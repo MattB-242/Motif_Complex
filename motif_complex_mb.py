@@ -20,6 +20,20 @@ def maxdist(l):
 
     return max(distlist)
 
+'---------------------------------------------------------------------------'
+'Check the number of edges between each vertex in a Motif Graph'
+'---------------------------------------------------------------------------'
+    
+def edgecount(motif_graph):
+        
+    edge_count_dict = {}
+        
+    for (i,j) in list(motif_graph[1].keys()):
+        edge_count_dict[(i,j)] = len(motif_graph[1][(i,j)])
+        
+    
+    return edge_count_dict
+
 '-----------------------------------------------------------'
 'Creates a standardized list of reduced translation indices'
 'for concentric layers in a dim-dimensional crystal'
@@ -144,3 +158,36 @@ class crystal_2d:
 
 
         return [vert_list, edge_list]
+    
+        '--------------------------------------------------------------------------------------'
+        'Run a filtration on Motif Graphs to a given distance s, and list values of s at which'
+        'new edges form between each vertex pair i,j, as a dictionary keyed by (i,j)'
+        '--------------------------------------------------------------------------------------'
+    
+        def MG_2d_Filter(self,s_max,increment):
+        
+            edge_filter_list = {j:[] for j in it.combinations_with_replacement(self.vertices,2)}
+            s = 0
+            mgraph = self.motif_graph_2d(s)
+        
+            while s <= s_max:
+                try:
+                    edge_1 = edgecount(mgraph)
+                    s += increment
+                    mgraph = self.motif_graph_2d(s)
+                    edge_2 = edgecount(mgraph)
+                
+            
+                    for (i,j) in list(edge_filter_list.keys()):
+                        if edge_1[(i,j)] != edge_2[(i,j)]:
+                            print('New edge formed between vertices '+(i,j)+' at distance '+s +'.')
+                            edge_filter_list[(i,j)].append(s)
+            
+                except:
+                    print('Problem at distance {:03f}'.format(s))
+                    print('The graph here is')
+                    print (mgraph)
+                    raise
+            
+            
+        return edge_filter_list
