@@ -1,7 +1,6 @@
 import itertools as it
 import numpy as np
 import math
-import operator
 
 '-----------------------------------------------------------'
 'Calculate the maximum pairwise distance of a list of points'
@@ -116,36 +115,36 @@ class crystal_2d:
     '---------------------------------------------------------------------------'
 
     def motif_graph_2d(self, s):
+        
 
         'Initialise vertex and edge data'
         vert_list = {i:[[0,0]] for i in self.motif}
         edge_list = {j:[] for j in it.combinations_with_replacement(self.vertices,2)}
-        print(edge_list)
 
-        vertrans = []
+        vertrans = self.expand(1)
+        
 
         'Expand graph in layers up to the layer beyond the target distance'
-        i = 1
+        i = 0
         while maxdist(self.getpoints()) < s:
             vertrans.extend(self.expand(i, i-1))
             i+=1
 
+       
         'Check in-cell motif distances'
         for i in self.vertices:
             for j in self.vertices:
                 d = np.linalg.norm(np.array(self.motif[j][0]) - np.array(self.motif[i][0]))
-                print(d)
-                if d < s and (i,j) in edge_list.keys():
+                if 0 < d < s and (i,j) in edge_list.keys():
                         edge_list[(i,j)].append([[0,0],d])
 
         'Check all other motif distances'
         for i in self.vertices:
+            mot_point = self.motif[i][0]
             for j in self.vertices:
-                mot_point = self.motif[i][0]
-                mot_test = self.motif[j]
-                'Check distance between motif point and each translated point'
+                mot_test = self.motif[j][1:]
                 for k in mot_test:
-                    p = mot_test.index(k)-1
+                    p = mot_test.index(k)
                     d = np.linalg.norm(np.array(k) - np.array(mot_point))
                     'Add vertex and edge data if distance less than threshold'
                     if d != 0 and d < s:
@@ -155,6 +154,8 @@ class crystal_2d:
                         'Avoid duplication of (i,j) and (j,i) edges (again, from reverse translations)'
                         if (i,j) in edge_list.keys():
                             edge_list[(i,j)].append([vertrans[p],d])
+                        else: 
+                            edge_list[(j,i)].append([vertrans[p],d])
 
 
         return [vert_list, edge_list]
@@ -191,3 +192,7 @@ class crystal_2d:
             
             
         return edge_filter_list
+    
+onesq = crystal_2d([[1,0],[0,1]],{1:[[0,0]]})
+print(onesq.motif)
+print(onesq.motif_graph_2d(3))
