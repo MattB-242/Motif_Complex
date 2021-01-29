@@ -21,4 +21,6 @@ For each distance d < s between vertices i and j (with possibly i=j) it adds the
 
 The output is therefore a vertex dictionary consisting of entries of type i:[[a_1,a_2]]....] and an edge dictionary consisting of entries ij;[[a_1,a_2],d],...]
 
+Having calculated the motif graph at a certain distance, the function *motif_seq_2d(mgraph)* takes this output as a parameter and outputs the sequence of graphs up to that point.
+
 *NB There are a couple of kludgy fixes to avoid some duplication and some wierdness with index counting that probably have more elegant solutions...
