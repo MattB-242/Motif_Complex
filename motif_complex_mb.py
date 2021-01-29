@@ -160,39 +160,41 @@ class crystal_2d:
 
         return [vert_list, edge_list]
     
-        '--------------------------------------------------------------------------------------'
-        'Run a filtration on Motif Graphs to a given distance s, and list values of s at which'
-        'new edges form between each vertex pair i,j, as a dictionary keyed by (i,j)'
-        '--------------------------------------------------------------------------------------'
+'----------------------------------------------------'
+'Given an input in the form of a 2D motif graph at' 
+'scale(s), output a list of such graphs which is the' 
+'sequence up to and including the final graph'
+'----------------------------------------------------'
+
+def motif_seq_2d(mgraph):
     
-        def MG_2d_Filter(self,s_max,increment):
-        
-            edge_filter_list = {j:[] for j in it.combinations_with_replacement(self.vertices,2)}
-            s = 0
-            mgraph = self.motif_graph_2d(s)
-        
-            while s <= s_max:
-                try:
-                    edge_1 = edgecount(mgraph)
-                    s += increment
-                    mgraph = self.motif_graph_2d(s)
-                    edge_2 = edgecount(mgraph)
-                
-            
-                    for (i,j) in list(edge_filter_list.keys()):
-                        if edge_1[(i,j)] != edge_2[(i,j)]:
-                            print('New edge formed between vertices '+(i,j)+' at distance '+s +'.')
-                            edge_filter_list[(i,j)].append(s)
-            
-                except:
-                    print('Problem at distance {:03f}'.format(s))
-                    print('The graph here is')
-                    print (mgraph)
-                    raise
-            
-            
-        return edge_filter_list
+    vertlist = list(mgraph[0].keys())
+    
+    graphseq = []
+    
+    'Get list of edge lengths in reverse order'
+    all_edge_lengths = []
+    for key in mgraph[1]:
+        all_edge_lengths.extend([i[1] for i in mgraph[1][key]])
+    
+    edge_lengths = list(set(list(all_edge_lengths)))
+    
+    edge_lengths.sort()
+    
+    for i in edge_lengths:
+        seqedge = {j:[] for j in it.combinations_with_replacement(vertlist,2)}
+        for key in mgraph[1]:
+            for k in mgraph[1][key]:
+                if k[1] <= i:
+                    seqedge[key].append(k)
+                    
+        print('ready to add')
+    
+        graphseq.append([vertlist,seqedge])
+
+    return graphseq
     
 onesq = crystal_2d([[1,0],[0,1]],{1:[[0,0]]})
 print(onesq.motif)
-print(onesq.motif_graph_2d(3))
+testgraph = onesq.motif_graph_2d(3)
+print(motif_seq_2d(testgraph))
