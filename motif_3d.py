@@ -39,9 +39,9 @@ class Crystal_3d:
         self.motif_ord = len(fmotif)
         self.vertices = list(fmotif.keys())
         self.lens = [np.linalg.norm(i) for i in lattice]
-        self.alpha = 0
-        self.beta = 0
-        self.gamma = 0
+        self.alpha = np.arccos(np.dot((self.lattice[1]/np.linalg.norm(self.lattice[1])), (self.lattice[2]/np.linalg.norm(self.lattice[2]))))
+        self.beta = np.arccos(np.dot((self.lattice[0]/np.linalg.norm(self.lattice[0])), (self.lattice[2]/np.linalg.norm(self.lattice[2]))))
+        self.gamma = np.arccos(np.dot((self.lattice[0]/np.linalg.norm(self.lattice[0])), (self.lattice[1]/np.linalg.norm(self.lattice[1]))))
 
     def cartesianize(self):
         
