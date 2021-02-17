@@ -9,3 +9,5 @@ The function *cartesianize()* converts the fractional co-ordinates to cartesian 
 
 Finally, *motif_graph_3d(self, s)* creates the motif graph up to the distance value s
 
+UPDATE = the motif graph function has been corrected to ensure intra-motif distances are calcuated. It also now determines whether there are edges between all points in the motif, and also whether there is an edge between every point and its lattice translate. 
+
