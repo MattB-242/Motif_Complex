@@ -89,37 +89,48 @@ class Crystal_3d:
         originlist = [self.cartesianize()[1][i][0] for i in self.cartesianize()[1]]
         'Cartesian co-ordinates of points in the cell with the lattice at the origin'
             
-        'Expand until first point where distances greater than scale appear'
-        while distcheck < s:
-            startcheck = len(tlist)
-            scaffold = self.expand3d(layer, trans = tlist)
+        dset = [0] 
+        'Check distances within motif'
+        first_el = [j for j in it.combinations_with_replacement(self.vertices,2)]
+        for j in first_el:
+            d = np.linalg.norm(np.array(originlist[j[1]-1]) - np.array(originlist[j[0]-1]))
+            dset.append(d)
+            if 0 < d <= s:
+                edgelist[j].append([(0,0,0), d])
+        
+        
+        distcheck = max(dset)
+        if distcheck > s:
+            print('Still within motif')
+        
+            return [vertlist, edgelist]
+        
+        else:
+            'Expand until first point where distances greater than scale appear'
+            while distcheck < s:
+                startcheck = len(tlist)
+                scaffold = self.expand3d(layer, trans = tlist)
             
             
-            dset = [0] 
+                
             
-            'Check distances within motif'
-            first_el = [j for j in it.combinations_with_replacement(self.vertices,2)]
-            for j in first_el:
-                d = np.linalg.norm(np.array(originlist[j[1]-1]) - np.array(originlist[j[0]-1]))
-                dset.append(d)
-                if 0 < d <= s:
-                    edgelist[j].append([(0,0,0), d])
+
             
-            'Check distances in layers out from motif'
-            for i in originlist:
-                for j in scaffold[1]:
-                    edgekey = (originlist.index(i)+1, j)
-                    if edgekey in list(edgelist.keys()):
-                        for k in scaffold[1][j][startcheck:]:
-                            place = scaffold[1][j].index(k)
-                            d = np.linalg.norm(np.array(k) - np.array(i))
-                            dset.append(d)
-                            if 0 < d <= s:
-                                edgelist[edgekey].append([scaffold[2][place], d])
+                'Check distances in layers out from motif'
+                for i in originlist:
+                    for j in scaffold[1]:
+                        edgekey = (originlist.index(i)+1, j)
+                        if edgekey in list(edgelist.keys()):
+                            for k in scaffold[1][j][startcheck:]:
+                                place = scaffold[1][j].index(k)
+                                d = np.linalg.norm(np.array(k) - np.array(i))
+                                dset.append(d)
+                                if 0 < d <= s:
+                                    edgelist[edgekey].append([scaffold[2][place], d])
                                         
-            distcheck = max(dset)
-            tlist = scaffold[2]
-            layer+=1
+                distcheck = max(dset)
+                tlist = scaffold[2]
+                layer+=1
         
         motiflist = []
         for j in edgelist:
@@ -133,13 +144,14 @@ class Crystal_3d:
                 looplist.append(edgelist[j][0][1])      
         
         if motiflist:
-            print('Motif distance achieved at ' + repr(min(motiflist)))
+            print('Motif distance achieved at ' + repr(max(motiflist)))
             
         if len(looplist) == len(vertlist):
             print('Loop distance acheived at ' + repr(min(looplist)))
                         
         return [vertlist,edgelist]
                           
-crystest = Crystal_3d([[1,0,0],[0,1,0],[0,0,1]], {1:[0,0,0], 2:[0.2, 0.3, 0.4]})
+crystest = Crystal_3d([[1,0,0],[0.1,1,0],[0.3,0.2,1]], {1:[0,0,0], 2:[0.2, 0.3, 0.4], 3:[0.7,0.9,0.8]})
 
+print(crystest.gamma)
 print(crystest.motif_graph_3d(1))
