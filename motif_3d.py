@@ -110,11 +110,6 @@ class Crystal_3d:
                 startcheck = len(tlist)
                 scaffold = self.expand3d(layer, trans = tlist)
             
-            
-                
-            
-
-            
                 'Check distances in layers out from motif'
                 for i in originlist:
                     for j in scaffold[1]:
