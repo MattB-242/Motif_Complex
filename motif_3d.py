@@ -94,7 +94,6 @@ class Crystal_3d:
         first_el = [j for j in it.combinations_with_replacement(self.vertices,2)]
         for j in first_el:
             d = np.linalg.norm(np.array(originlist[j[1]-1]) - np.array(originlist[j[0]-1]))
-            dset.append(d)
             if 0 < d <= s:
                 edgelist[j].append([(0,0,0), d])
         
