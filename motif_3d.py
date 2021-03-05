@@ -8,7 +8,7 @@ def int_3d(l, translist = [(0,0,0)]):
     
     layerlist.sort(reverse = True)
     
-    allvecs = (list(item for item in it.combinations_with_replacement(layerlist,3)))
+    allvecs = (list(item for item in it.product(layerlist,repeat = 3)))
 
     for i in allvecs:
         if translist == [(0,0,0)]:
@@ -29,7 +29,7 @@ def int_3d(l, translist = [(0,0,0)]):
             translist.remove(k)
             translist.append(flip)
 
-    return translist
+    return list(set(translist))
 
 class Crystal_3d:
     
