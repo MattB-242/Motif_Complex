@@ -1,9 +1,0 @@
-README.md
-setup.py
-ZhaoyuMotifGraph/__init__.py
-ZhaoyuMotifGraph/calculation.py
-ZhaoyuMotifGraph/motif_graph.py
-ZhaoyuMotifGraph.egg-info/PKG-INFO
-ZhaoyuMotifGraph.egg-info/SOURCES.txt
-ZhaoyuMotifGraph.egg-info/dependency_links.txt
-ZhaoyuMotifGraph.egg-info/top_level.txt
