@@ -27,6 +27,8 @@ It required the following utility functions:
 
 Note that in terms of viewing the graph as a voltage graph (Ross qv) only **plus directed** edges are added to the output. 
 
+**The functions below rely on those built in General_MGraph_Tools**
+
 The functions *get_mdist_3d, get_bdist_3d* and *get_ldist_3d* output the graph at the motif, bridging and loop distance respectively (see note above on bridging distance - proof that this is indeed the minimal distance is TBD). 
 
 The function *get_critical_distances_3d* outputs a list of the motif, bridge and loop distance in that order. 
