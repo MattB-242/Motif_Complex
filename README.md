@@ -13,16 +13,17 @@ Functions extracts/exampines a number of useful features:
 *mol_complement* outputs the complement of the molecular graph - that is, it gives the motif graph which has the shortest edge between any two vertices (where such an edge exists) removed.
 
 # Motif_Graph_3d
-he object Crystal_3d takes a list of lattice vectors (in the standard R3 basis) and a dictionary of integer labelled motif points. Motif co-ordinates are given **fractionally**. Lattice edge lengths and alpha, beta, gamma angle values are calculated directly from the object
+The object Crystal_3d takes a list of lattice vectors (in the standard R3 basis) and a dictionary of integer labelled motif points. Motif co-ordinates are given **fractionally**. Lattice edge lengths and alpha, beta, gamma angle values are calculated directly from the object
 
 The function *motif_graph_3d(self, s)* creates the motif graph up to the distance value *s* by expanding lattice translates. The output is a list of vertices, a dictionary with edges as keys with each edge associated with a list of edge voltages and their associated distances, sorted by edge distance, and the matrix of lattice vectors. 
 
 It required the following utility functions:
 
-    *cart_3d()* converts the fractional co-ordinates to cartesian ones. 
-    *int_3d(l, m=0)* takes integer parameters a list of integer 3-tuples  which are all non-parallel integer vectors with positive first non-zero entries whose       maximal L_infty distance is equal to layer and whose minimal L_infty distance is equal to *m*. 
+*cart_3d()* converts the fractional co-ordinates to cartesian ones. 
 
-    *int_3d_outer(l)* takes a single integer parameter and outputs *int_3d(l,l)*, which gives just those 3-tuples containing the maximum value of *l*. Setting *l = 0* gives just the zero tuple. 
+*int_3d(l, m=0)* takes integer parameters a list of integer 3-tuples  which are all non-parallel integer vectors with positive first non-zero entries whose       maximal L_infty distance is equal to layer and whose minimal L_infty distance is equal to *m*. 
+
+*int_3d_outer(l)* takes a single integer parameter and outputs *int_3d(l,l)*, which gives just those 3-tuples containing the maximum value of *l*. Setting *l = 0* gives just the zero tuple (and hence is used to calculate intra-motif distances in the first iteration of the motif graph algorithm). 
 
 Note that in terms of viewing the graph as a voltage graph (Ross qv) only **plus directed** edges are added to the output. 
 
